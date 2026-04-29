@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: uocra_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/uocra.db:/app/uocra.db
+      - ./backend/static:/app/static
+    env_file:
+      - ./backend/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend-v2
+      dockerfile: Dockerfile
+    container_name: uocra_frontend
+    ports:
+      - "80:80"
+    env_file:
+      - ./frontend-v2/.env.production
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  uocra_data:
