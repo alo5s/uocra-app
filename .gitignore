@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info
+.eggs
+pip-wheel-metadata/
+share/python-wheels/
+
+# Virtual Environments
+env/
+venv/
+ENV/
+.venv/
+*.venv/
+
+# Base de datos
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# Uploads y archivos temporales
+backend/uploads/
+backend/temp/
+backend/static/uploads/
+backend/static/photos/
+backend/static/logos/
+backend/static/temp/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.svg
+!src/assets/**/*
+
+# Frontend build
+frontend-v2/dist/
+frontend-v2/node_modules/
+frontend-v2/.vite/
+frontend-v2/coverage/
+frontend-v2/*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+backend/backend.log
+backend/server.log
+
+# Screenshots (temporary, can be added manually if needed)
+screenshots/
+
+# Chrome/Playwright
+.chrome/
+.playwright/
+cache/
