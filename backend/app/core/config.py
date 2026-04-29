@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     ADMIN_USERNAME: str = ""
     ADMIN_PASSWORD: str = ""
     
+    ALLOWED_ORIGINS: str = ""
+    
     CLOUDFLARED_CHECK_INTERVAL: int = 30
     BASE_URL: str = ""
     

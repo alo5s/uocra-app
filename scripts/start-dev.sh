@@ -34,9 +34,24 @@ cleanup() {
 # Capturar Ctrl+C
 trap cleanup INT TERM
 
+# Verificar puertos disponibles
+check_port() {
+    if lsof -ti:$1 > /dev/null 2>&1; then
+        echo -e "${RED}❌ Error: Puerto $1 ya está en uso${NC}"
+        echo -e "${YELLOW}💡 Tip: Ejecuta 'lsof -ti:$1 | xargs kill -9' para liberarlo${NC}"
+        return 1
+    fi
+    return 0
+}
+
 # 1. Iniciar Backend
 echo -e "${GREEN}🔧 Iniciando Backend (FastAPI)...${NC}"
 cd "$BASE_DIR/backend"
+
+# Verificar puerto 8000
+if ! check_port 8000; then
+    exit 1
+fi
 
 # Verificar entorno virtual
 if [ ! -d "venv" ]; then
@@ -56,9 +71,9 @@ if [ ! -f ".env" ]; then
 fi
 
 # Iniciar backend en background
-uvicorn app.main:app --reload --port 8000 &
+uvicorn app.main:app --reload --port 8000 > /tmp/backend.log 2>&1 &
 BACKEND_PID=$!
-echo -e "${GREEN}✅ Backend iniciado en http://localhost:8000${NC}"
+echo -e "${GREEN}✅ Backend iniciado en http://localhost:8000 (PID: $BACKEND_PID)${NC}"
 echo -e "${GREEN}   Docs disponibles en http://localhost:8000/docs${NC}"
 
 # Esperar a que el backend esté listo
@@ -75,6 +90,16 @@ done
 echo -e "${GREEN}🎨 Iniciando Frontend (React + Vite)...${NC}"
 cd "$BASE_DIR/frontend-v2"
 
+# Verificar puerto 5173 (o 5174)
+FRONTEND_PORT=5173
+if lsof -ti:$FRONTEND_PORT > /dev/null 2>&1; then
+    FRONTEND_PORT=5174
+    if lsof -ti:$FRONTEND_PORT > /dev/null 2>&1; then
+        echo -e "${RED}❌ Error: Puertos 5173 y 5174 están en uso${NC}"
+        exit 1
+    fi
+fi
+
 # Verificar node_modules
 if [ ! -d "node_modules" ]; then
     echo -e "${YELLOW}⚠️  No se encontraron node_modules. Instalando...${NC}"
@@ -82,10 +107,10 @@ if [ ! -d "node_modules" ]; then
 fi
 
 # Iniciar frontend en background
-npm run dev &
+npm run dev -- --port $FRONTEND_PORT > /tmp/frontend.log 2>&1 &
 FRONTEND_PID=$!
-echo -e "${GREEN}✅ Frontend iniciado${NC}"
-echo -e "${GREEN}   URL: http://localhost:5173 (o 5174 según configuración)${NC}"
+echo -e "${GREEN}✅ Frontend iniciado (PID: $FRONTEND_PID)${NC}"
+echo -e "${GREEN}   URL: http://localhost:$FRONTEND_PORT${NC}"
 
 # Mostrar URLs
 echo ""
