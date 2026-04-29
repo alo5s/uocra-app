@@ -45,6 +45,14 @@ backend/static/temp/
 *.gif
 *.bmp
 *.tiff
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.svg
+!frontend-v2/public/**/*.png
+!frontend-v2/public/**/*.jpg
+!frontend-v2/public/**/*.jpeg
+!frontend-v2/public/**/*.svg
 !src/assets/**/*
 
 # Frontend build
